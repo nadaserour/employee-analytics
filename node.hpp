@@ -21,8 +21,14 @@ public:
    ~Node();
    void leftNode(Node* left);
    void rightNode(Node* right);
+   Node* getLeft();
+   Node* getRight();
+   Node * getAge();
+
     //getters right and left and node 
     //memoization function
 };
+
+
 
 #endif

@@ -16,8 +16,11 @@ class BST{
         bool search(const ElementType& item) const; //sara
         void insert(const Node item); //salma
         void remove(const Node item); //nada
-        void inorder(ostream& out) const; //renad
+        void inorder(Node* root) const; //renad
+        void postOrder(Node* root)const;//renad
+        void preOrder(Node* root)const;//renad
         void graph(ostream& out) const; //sara
+        void BFS(Node * root)const;
 
 };
 
