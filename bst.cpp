@@ -59,5 +59,53 @@ void BST::BFS(Node*root)const{
 
 }
 
+bool BST::empty() const {
+	return root == 0;
+}
 
+void BST:: remove(const Node item) {
+	bool found;
+	Node* itemPtr;
+    Node* parent;
+	search2(item, found, itemPtr, parent);
+
+	if (!found) {
+		cout << "employee not found\n";
+			return;
+	}
+	if (itemPtr->getLeft() != 0 && itemPtr->getRight() != 0) {
+		Node* itemSucc = itemPtr->getRight();
+		parent = itemPtr;
+		while (itemSucc->getLeft() != 0) {
+			parent = itemSucc;
+			itemSucc = itemSucc->getLeft();
+		}
+		itemPtr->getAge() = itemSucc->getAge();
+		itemPtr = itemSucc;
+	}
+	Node* sub = itemPtr->getLeft();
+	if (sub == 0) sub = itemPtr->getRight();
+	if (parent == 0) root = sub;
+	else if (parent->getLeft() == itemPtr) parent->getLeft() = sub;
+	else parent->getRight() = sub;
+	delete itemPtr;
+}
+
+template <typename ElementType2>
+void BST::search2(const ElementType2& item, bool& found, Node*& locptr, Node*& parent) const {
+	locptr = root;
+	parent = 0; 
+	found = false;
+	while (!found && locptr != 0) {
+		if (item < locptr->data) {
+			parent = locptr;
+			locptr = locptr->left;
+		}
+		else if (locptr->data < item) {
+			parent = locptr;
+			locptr = locptr->right;
+		}
+		else found = true;
+	}
+}
 
