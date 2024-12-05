@@ -108,4 +108,54 @@ void BST::search2(const ElementType2& item, bool& found, Node*& locptr, Node*& p
 		else found = true;
 	}
 }
+/*void BST::insert(Employee emp) {
+    if (!root) return new Node(emp);
+
+    if (emp->getAge() < root->getAge()) {
+        root->setLeft(insertNode(root->getLeft(), emp));
+    } else {
+        root->setRight(insertNode(root->getRight(), emp));
+    }
+
+    root->updateMemoizedVals();
+    
+} */
+//create a leaf , will use it in insert
+BST::Node* BST::createLeaf(Employee* item){
+  Node* leaf = new Node(item);
+  return leaf;
+}
+
+
+//insert logic here is differnet from tutorial
+void BST::insert(const Employee* item){
+  insertPrivate(item, root);
+}
+
+void BST::insertPrivate(const Employee item, Node* ptr){
+  if(empty())
+    root = createLeaf(item);
+  
+  //right 
+  if(item > ptr->data){
+    if(ptr->right == nullptr)
+      ptr->right = createLeaf(item);
+    else
+      insertPrivate(item, ptr->right); //recurrsion
+  } 
+  
+  else if (item < ptr->data) //left
+  {
+    if(ptr->left == nullptr)
+      ptr->left = createLeaf(item);
+    else
+      insertPrivate(item, ptr->left);
+  } 
+  //duplicate data
+  else{
+    cout << "This item already exists\n";
+  }
+
+
+}
 

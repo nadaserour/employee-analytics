@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Nada Serour/employee-analytics-1",
-      "program": "c:/Users/Nada Serour/employee-analytics-1/build/Debug/outDebug",
+      "cwd": "c:/Users/Nada Serour/employee-analytics-1/newproject",
+      "program": "c:/Users/Nada Serour/employee-analytics-1/newproject/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
