@@ -135,159 +135,135 @@ BST::NodePtr BST::insertPrivate(Employee* item, NodePtr ptr) {
 
 //remove
 //Remove Node
- void remove(const Employee* item);{
-  privateRemoveNode(item, root);
+ // Remove Node
+void BST::remove(const Employee* item) {
+    removePrivate(item, root);
 }
-void BST::privateRemoveNode(Employee* item, NodePtr parent){
+void BST::removePrivate(const Employee* item, NodePtr parent) {
     int key = item->getAge();
-  //we have to check for several cases (empty, root, no children, one child, 2 children) cases
-  if(!empty()){
-    if(root->getAge() == key){
-      removeRootMatch(); //helper function
-    } else{
-      //in left sub tree
-      if(key < parent->getAge() && parent->left != nullptr){
-        parent->left->getAge() == key ?
-        removeMatch(parent, parent->left, true): //another helper function
-        privateRemoveNode(key, parent->left); //recurrsive call
-      } 
-      //in right sub tree
-      else if(key > parent->data && parent->right != nullptr){
-        parent->right->getAge() == key ?
-        removeMatch(parent, parent->right, false): //another helper function
-        privateRemoveNode(key, parent->right); //recurrsive call
-      } 
-      //not in tree
-      else{
-        cout << "The node is not found\n";
-      }
-
+    // Check for several cases (empty, root, no children, one child, two children)
+    if (!empty()) {
+        if (root->getAge() == key) {
+            removeRootMatch(); // Helper function
+        }
+        else {
+            // In left subtree
+            if (key < parent->getAge() && parent->getLeft() != nullptr) {
+                parent->getLeft()->getAge() == key
+                    ? removeMatch(parent, parent->getLeft(), true) // Another helper function
+                    : removePrivate(item, parent->getLeft()); // Recursive call
+            }
+            // In right subtree
+            else if (key > parent->getAge() && parent->getRight() != nullptr) {
+                parent->getRight()->getAge() == key
+                    ? removeMatch(parent, parent->getRight(), false) // Another helper function
+                    : removePrivate(item, parent->getRight()); // Recursive call
+            }
+            // Not in tree
+            else {
+                std::cout << "The node is not found\n";
+            }
+        }
     }
-
-  } else
-    cout << "The tree is empty\n";
-
+    else {
+        std::cout << "The tree is empty\n";
+    }
 }
-
-//helper functions for removeNode function
-void BST::removeRootMatch(){
-
-  if(root != nullptr){
-    NodePtr delPtr = root;
-    int rootData = root->getAge();
-    int minInRightSubTree;
-
-    //Case 0 - 0 Children
-    if(root->left == nullptr && root->right == nullptr){
-      root = nullptr;
-      delete delPtr;
+// Helper functions for removeNode function
+void BST::removeRootMatch() {
+    if (root != nullptr) {
+        NodePtr delPtr = root;
+        int rootData = root->getAge();
+        int minInRightSubTree;
+        // Case 0 - 0 Children
+        if (root->getLeft() == nullptr && root->getRight() == nullptr) {
+            root = nullptr;
+            delete delPtr;
+        }
+        // Case 1 - 1 Child (left or right)
+        else if (root->getLeft() == nullptr && root->getRight() != nullptr) {
+            root = root->getRight();
+            delPtr->setRight(nullptr);
+            delete delPtr;
+        }
+        else if (root->getLeft() != nullptr && root->getRight() == nullptr) {
+            root = root->getLeft();
+            delPtr->setLeft(nullptr);
+            delete delPtr;
+        }
+        // Case 2 - 2 Children
+        else if (root->getLeft() != nullptr && root->getRight() != nullptr) {
+            // Replace the root with the smallest value in the right subtree
+            minInRightSubTree = findMinVal(root->getRight());
+            Employee temp(minInRightSubTree, 0, 0); // Create a temporary Employee object
+            removePrivate(&temp, root);
+            root->setAge(minInRightSubTree);
+        }
     }
-    
-    //Case 1 - 1 Child (left - right)
-    else if(root->left == nullptr && root->right != nullptr){
-      root = root->right;
-      delPtr->right = nullptr; //delete delPtr->right;
-      delete delPtr;
-    } 
-
-    else if(root->left != nullptr && root->right == nullptr){
-      root = root->left;
-      delPtr->left = nullptr; //delete delPtr->left;
-      delete delPtr;
+    else {
+        std::cout << "The tree is empty\n";
     }
-
-    //Case 2 - 2 children
-    else if(root->left != nullptr && root->right != nullptr){
-      //replace the root with the smallest val in right sub tree
-      minInRightSubTree = privateFindMinVal(root->right);
-      privateRemoveNode(minInRightSubTree, root);
-      root->setAge(minInRightSubTree);
-    }
-
-  } else{
-    cout << "The tree is empty\n";  
-  }
-
 }
- 
-void BST::removeMatch(NodePtr parent, NodePtr match, bool left){
-  if(!empty()){
-
-    NodePtr delPtr;
-    int matchKey = match->getAge();
-    int minInRightSubTree;
-
-    //Case 0 - 0 children
-    if(match->left == nullptr && match->right == nullptr){
-      delPtr = match;
-      left == true ? parent->left = nullptr : parent->right = nullptr;
-      delete delPtr;
+void BST::removeMatch(NodePtr parent, NodePtr match, bool left) {
+    if (!empty()) {
+        NodePtr delPtr;
+        int matchKey = match->getAge();
+        int minInRightSubTree;
+        // Case 0 - 0 Children
+        if (match->getLeft() == nullptr && match->getRight() == nullptr) {
+            delPtr = match;
+            left == true ? parent->setLeft(nullptr) : parent->setRight(nullptr);
+            delete delPtr;
+        }
+        // Case 1 - 1 Child (right child)
+        else if (match->getLeft() == nullptr && match->getRight() != nullptr) {
+            left == true ? parent->setLeft(match->getRight()) : parent->setRight(match->getRight());
+            match->setRight(nullptr);
+            delete match;
+        }
+        // Case 1 - 1 Child (left child)
+        else if (match->getLeft() != nullptr && match->getRight() == nullptr) {
+            left == true ? parent->setLeft(match->getLeft()) : parent->setRight(match->getLeft());
+            match->setLeft(nullptr);
+            delete match;
+        }
+        // Case 2 - 2 Children
+        else if (match->getLeft() != nullptr && match->getRight() != nullptr) {
+            minInRightSubTree = findMinVal(match->getRight());
+            Employee temp(minInRightSubTree, 0, 0); // Create a temporary Employee object
+            removePrivate(&temp, match);
+            match->setAge(minInRightSubTree);
+        }
     }
-
-    //Case 1 - 1 child 
-    //right child
-    else  if(match->left == nullptr && match->right != nullptr){
-      //if the match node is the left node, by pass the parent left to be the right of the match node 
-      left == true ? parent->left = match->right : parent->right = match->right;
-      match->right = nullptr;
-      delete match;
+    else {
+        std::cout << "The tree is empty\n";
     }
-    //left child
-    else if(match->left != nullptr && match->right == nullptr){
-      //if the match node is the left node, by pass the parent left to be the right of the match node 
-      left == true ? parent->left = match->left : parent->right = match->left;
-      match->left = nullptr;
-      delete match;
-    }
-
-    //Case 2 - 2 children
-    else if(match->left != nullptr && match->right != nullptr){
-      minInRightSubTree = privateFindMinVal(match->right);
-      privateRemoveNode(minInRightSubTree, root);
-      match->setAge(minInRightSubTree);
-    }
-
-  } 
-  else cout << "The tree is empty\n";
 }
-
-
-//find min value
-int BST::findMinVal(NodePtr ptr){
-  if(ptr != nullptr){
-    if(ptr->left == nullptr) //if you want to findMax, all you have to do is replace left with right!! 
-      return ptr->getAge();
-    else
-      return privateFindMinVal(ptr->left);
-
-  } else{ 
-    cout <<"The tree is empty\n";
-    return -1000; //in case of int
-  }
+// Find minimum value
+int BST::findMinVal(NodePtr ptr) {
+    if (ptr != nullptr) {
+        if (ptr->getLeft() == nullptr) // If you want to findMax, replace left with right
+            return ptr->getAge();
+        else
+            return findMinVal(ptr->getLeft());
+    }
+    else {
+        std::cout << "The tree is empty\n";
+        return -1000; // In case of int
+    }
 }
-
-
-//Destructor
-BST::~BST(){
-  removeSubTree(root);
+// Destructor
+BST::~BST() {
+    removeSubTree(root);
 }
-
-void BST::removeSubTree(NodePtr ptr){
-  //post order traversal
-  if(ptr != nullptr){
-    if(ptr->left != nullptr)
-      removeSubTree(ptr->left);
-    if(ptr->right != nullptr)
-      removeSubTree(ptr->right);
-          
-    delete ptr;
-
-  }
-} 
-
-
-
-
-
-
+void BST::removeSubTree(NodePtr ptr) {
+    // Post-order traversal
+    if (ptr != nullptr) {
+        if (ptr->getLeft() != nullptr)
+            removeSubTree(ptr->getLeft());
+        if (ptr->getRight() != nullptr)
+            removeSubTree(ptr->getRight());
+        delete ptr;
+    }
+}
 

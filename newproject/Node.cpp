@@ -49,7 +49,13 @@ Node* Node::getRight() const { return right; }
 
 Node* Node::getParent() const { return parent; }
 
+//setters 
 
+void Node::setAge(int age) { employee->setAge(age); }
+
+void Node::setIncome(double income) { employee->setIncome(income); }
+
+void Node::setPerformance(double performance) { employee->setPerformance(performance); }
 
 // getters for memoized values
 double Node::getMemoSumIncome() { return memoSumIncome; }

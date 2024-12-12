@@ -31,6 +31,9 @@ public:
   void setLeft(Node* left);
   void setRight(Node* right);
   void setParent(Node* parent);
+  void setAge(int age);
+  void setIncome(double income);
+  void setPerformance(double performance);
 
   //getters
   //get the values of employee

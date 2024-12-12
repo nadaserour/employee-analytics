@@ -13,7 +13,7 @@ class BST{
         NodePtr createLeaf(Employee* item);
         NodePtr insertPrivate(Employee* item, NodePtr ptr);
 		//aux for remove 
-        void privateRemoveNode(Employee* item, NodePtr parent);
+        void removePrivate(const Employee* item, NodePtr parent);
         void removeRootMatch();
         void removeMatch(NodePtr parent, NodePtr match, bool left);
         int findMinVal(NodePtr ptr); //int is the type for age
