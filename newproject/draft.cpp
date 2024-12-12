@@ -68,3 +68,47 @@ double Node::querySumPerformance(int maxAge) {
     
     return result;
 }
+
+
+void Node::updateMemoizedVals() {
+    //start with current node vals
+    memo["sumIncome"] = employee->getIncome();
+    memo["sumPerformance"] = employee->getPerformance();
+    memo["maxIncome"] = employee->getIncome();
+    memo["minIncome"] = employee->getIncome();
+    memo["maxPerformance"] = employee->getPerformance();
+    memo["minPerformance"] = employee->getPerformance();
+
+    //include left child to update memoized vals
+    if (left) {
+        memo["sumIncome"] += left->getMemoValue("sumIncome");
+        memo["sumPerformance"] += left->getMemoValue("sumPerformance");
+        memo["maxIncome"] = max(memo["maxIncome"], left->getMemoValue("maxIncome"));
+        memo["minIncome"] = min(memo["minIncome"], left->getMemoValue("minIncome"));
+        memo["maxPerformance"] = max(memo["maxPerformance"], left->getMemoValue("maxPerformance"));
+        memo["minPerformance"] = min(memo["minPerformance"], left->getMemoValue("minPerformance"));
+    }
+
+    //include right child to update memoized vals
+    if (right) {
+        memo["sumIncome"] += right->getMemoValue("sumIncome");
+        memo["sumPerformance"] += right->getMemoValue("sumPerformance");
+        memo["maxIncome"] = max(memo["maxIncome"], right->getMemoValue("maxIncome"));
+        memo["minIncome"] = min(memo["minIncome"], right->getMemoValue("minIncome"));
+        memo["maxPerformance"] = max(memo["maxPerformance"], right->getMemoValue("maxPerformance"));
+        memo["minPerformance"] = min(memo["minPerformance"], right->getMemoValue("minPerformance"));
+    }
+
+    //To compute average
+    int count = 1;
+    if (left) count += left->getMemoValue("nodeCount");
+    if (right) count += right->getMemoValue("nodeCount");
+    memo["nodeCount"] = count;
+
+    memo["avgIncome"] = memo["sumIncome"] / count;
+    memo["avgPerformance"] = memo["sumPerformance"] / count;
+}
+
+double Node::getMemoValue(const string& key) {
+    return memo[key];
+}

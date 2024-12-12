@@ -4,29 +4,40 @@
 #include "Node.hpp"
 using namespace std; 
 
+
 class BST{
+    typedef Node* NodePtr;
     private:
-        Node* root;
-        Node* createLeaf(dataType item);
-        void insertPrivate(const Employee* item, Node* ptr);
+        NodePtr root;
+		//aux for insert
+        NodePtr createLeaf(Employee* item);
+        NodePtr insertPrivate(Employee* item, NodePtr ptr);
+		//aux for remove 
+        void privateRemoveNode(Employee* item, NodePtr parent);
+        void removeRootMatch();
+        void removeMatch(NodePtr parent, NodePtr match, bool left);
+        int findMinVal(NodePtr ptr); //int is the type for age
+		//aux for destructor 
+        void removeSubTree(NodePtr ptr);
+		//aux for search
+        template <typename ElementType>
+        bool searchPrivate(const ElementType& item, bool& found, NodePtr& locptr, NodePtr& parent) const;
+		//aux for BFS
+        void BFSPrivate(NodePtr root)const;
 
-
-
-
-    public: 
+    public:
         BST();
+        ~BST();
         bool empty() const; //nada.
         template <typename ElementType>
         bool search(const ElementType& item) const; //sara
-        template <typename ElementType2>
-        void search2(const ElementType2& item, bool& found, Node*& locptr, Node*& parent) const;
-        void insert(const Employee* item); //salma
-        void remove(const Node item); //nada
-        void inorder(Node* root) const; //renad
-        void postOrder(Node* root)const;//renad
-        void preOrder(Node* root)const;//renad
+        void insert(Employee* item); //salma
+        void remove(const Employee* item); //nada
+        void inorder(NodePtr root) const; //renad
+        //void postOrder(NodePtr root)const;//renad
+        //void preOrder(NodePtr root)const;//renad
         void graph(ostream& out) const; //sara
-        void BFS(Node * root)const;
+        void BFS()const;
 
 
 };
