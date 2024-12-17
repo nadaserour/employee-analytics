@@ -12,6 +12,16 @@ int main() {
     Employee* emp5 = new Employee(25, 45000, 88);
     Employee* emp6 = new Employee(35, 55000, 92);
     Employee* emp7 = new Employee(50, 70000, 98);
+
+    //node instances 
+    Node node1 = Node(emp1);
+    Node node2 = Node(emp2);
+    Node node3 = Node(emp3);
+    Node node4 = Node(emp4);
+    Node node5 = Node(emp5);
+    Node node6 = Node(emp6);
+    Node node7 = Node(emp7);
+
     // Test insertion
     std::cout << "Inserting employees into the tree...\n";
     tree.insert(emp1);
@@ -39,9 +49,9 @@ int main() {
     tree.inorder(tree.getRoot());
     // Test memoization updates
     std::cout << "\nTesting memoization updates...\n";
-    emp1->updateTreeMemoizedVals(); // Propagate memoization updates
-    std::cout << "Memoized sum of incomes at root: " << emp1->getMemoSumIncome() << "\n";
-    std::cout << "Memoized average performance at root: " << emp1->getMemoAvgPerformance() << "\n";
+    node1.updateTreeMemoizedVals(); // Propagate memoization updates
+    std::cout << "Memoized sum of incomes at root: " << node1.getMemoSumIncome() << "\n";
+    std::cout << "Memoized average performance at root: " << node1.getMemoAvgPerformance() << "\n";
     // Test destructor (cleanup)
     std::cout << "\nDestroying the tree...\n";
     // Destructor will be called automatically when the program ends
