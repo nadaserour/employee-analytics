@@ -8,7 +8,7 @@ using namespace std;
 class BST {
     typedef Node* NodePtr;
 private:
-    NodePtr root;
+    NodePtr root=nullptr;
     //aux for insert
     NodePtr createLeaf(Employee* item);
     NodePtr insertPrivate(Employee* item, NodePtr ptr);
@@ -22,7 +22,7 @@ private:
     void removeSubTree(NodePtr ptr);
     //aux for search
     template <typename ElementType>
-    bool searchPrivate(const ElementType& item, bool& found, NodePtr& locptr, NodePtr& parent) const;
+    bool searchPrivate(const ElementType& item, bool& found, Node*& locptr, Node*& parent) const;
     //aux for BFS
     void BFSPrivate(NodePtr root)const;
 
