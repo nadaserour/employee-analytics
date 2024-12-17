@@ -24,6 +24,7 @@ class BST{
         bool searchPrivate(const ElementType& item, bool& found, NodePtr& locptr, NodePtr& parent) const;
 		//aux for BFS
         void BFSPrivate(NodePtr root)const;
+        void propagateLazy(Node* node);
 
     public:
         BST();

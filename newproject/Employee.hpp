@@ -6,6 +6,7 @@ class Employee{
     int age;
     double income;
     double performance;
+    
 
   public:
     //Constructors
