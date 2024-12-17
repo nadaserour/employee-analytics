@@ -10,9 +10,9 @@ using namespace std;
 class Node {
 private:
 	Employee* employee; //The node has a pointer to the object that hold the employee data
-	Node* left;
-	Node* right;
-	Node* parent;
+	Node* left=nullptr;
+	Node* right=nullptr;
+	Node* parent=nullptr;
 	//Memoized Values
 	int memoizedCount; //use this if we will implement the count query
 	double memoSumIncome;
