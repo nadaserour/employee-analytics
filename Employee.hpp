@@ -3,9 +3,9 @@
 
 class Employee {
 private:
-    int age;
-    double income;         //q1
-    double performance;    //q2
+    int age=0;
+    double income=0;         //q1
+    double performance=0;    //q2
 
 public:
     //Constructors
