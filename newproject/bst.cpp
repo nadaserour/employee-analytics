@@ -267,3 +267,27 @@ void BST::removeSubTree(NodePtr ptr) {
     }
 }
 
+void BST::propagateLazy(Node* node) {
+    if (node==nullptr || !(node->getLazyFlag()))return;
+
+    node->applyLazy();
+
+    if (node->getLeft() != nullptr) {
+        node->getLeft()->setLazyValue(node->getLazyValue());
+        node->getLeft()->setOperation(node->getOperation());
+        node->getLeft()->setLazyFlag(true);
+    }
+    if (node->getRight() != nullptr) {
+        node->getRight()->setLazyValue(node->getLazyValue());
+        node->getRight()->setOperation(node->getOperation());
+        node->getRight()->setLazyFlag(true);
+
+    }
+
+    node->setLazyFlag(false);
+    node->setLazyValue(0.0);
+
+
+
+}
+

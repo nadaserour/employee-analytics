@@ -126,6 +126,51 @@ void Node::updateTreeMemoizedVals() {
     }
 }
 
+void Node:: applyLazy() {
+    if (lazyFlag) {
+        switch (operation) {
+        case ADD:
+            employee->setPerformance(employee->getPerformance()+lazyValue;
+            break;
+        case MULTIPLY:
+            employee->setPerformance(employee->getPerformance() * (1 + lazyValue));
+            break;
+        case SUBTRACT:
+            employee->setPerformance(employee->getPerformance() - lazyValue);
+            break;
+        case SET:
+            employee->setPerformance(lazyValue);
+            break;
+        }
+    }
+    lazyFlag = false;
+    lazyValue = 0.0;
+}
+
+double Node::getLazyValue() {
+    return lazyValue;
+}
+
+bool Node::getLazyFlag() {
+    return lazyFlag;
+}
+
+void Node::setLazyFlag(bool lazyFlag) {
+    this->lazyFlag = lazyFlag;
+}
+
+void Node::setLazyValue(double lazyValue) {
+    this->lazyValue = lazyValue;
+}
+
+updateOperation Node::getOperation() {
+    return operation;
+}
+
+void Node::setOperation(updateOperation operation) {
+    this->operation = operation;
+}
+
 //destructor
 Node::~Node() { 
   delete employee;
