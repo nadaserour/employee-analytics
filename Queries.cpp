@@ -1,6 +1,10 @@
-#include "Queries.hpp"
-#include "bst.hpp"
-#include "Node.hpp"
+//
+// Created by Nada Serour on 12/21/2024.
+//
+
+#include "Queries.h"
+#include "bst.h"
+#include "Node.h"
 #include <iostream>
 using namespace std;
 
@@ -224,4 +228,5 @@ double Queries::MinPerf(int minAge, int maxAge, BST bst) {
 	}
 	return minPerf;
 }
+
 

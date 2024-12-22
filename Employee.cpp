@@ -1,24 +1,28 @@
+//
+// Created by Nada Serour on 12/21/2024.
+//
+
 #include <iostream>
-#include "Employee.hpp"
+#include "Employee.h"
 using namespace std;
 
 //Constructors
 
-Employee::Employee() {}
+//Employee::Employee() = default;
 
-Employee::Employee(int age, double income, double perfromance)
+Employee::Employee(double age, double income, double performance)
     :age(age), income(income), performance(performance)
 {}
 
 //getters implementation
-int Employee::getAge() const { return age; }
+double Employee::getAge() const { return age; }
 double Employee::getIncome() const { return income; }
 double Employee::getPerformance() const { return performance; }
 
 
 //setters
 //we may use templates here later
-void Employee::setAge(int age) {
+void Employee::setAge(double age) {
     if (age > 0)
         this->age = age;
     else
@@ -37,4 +41,4 @@ void Employee::setPerformance(double performance) {
 }
 
 //Destructor
-Employee::~Employee() {}
+Employee::~Employee() = default;

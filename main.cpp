@@ -1,39 +1,30 @@
 #include <iostream>
-#include "bst.hpp"
-#include "Employee.hpp"
+#include "cmake-build-debug/bst.h"
+//#include "cmake-build-debug/Employee.h"
+using namespace std;
 int main() {
     // Create a BST instance
     BST tree;
+    Node *node1 = new Node(45, 50000, 90);
+    double age1= node1->getAge();
+    double income1= node1->getIncome();
+    double performance1= node1->getPerformance();
     // Create Employee instances
-    Employee* emp1 = new Employee(30, 50000, 90);
-    Employee* emp2 = new Employee(20, 40000, 85);
-    Employee* emp3 = new Employee(40, 60000, 95);
-    Employee* emp4 = new Employee(10, 30000, 80);
-    Employee* emp5 = new Employee(25, 45000, 88);
-    Employee* emp6 = new Employee(35, 55000, 92);
-    Employee* emp7 = new Employee(50, 70000, 98);
-
-    //node instances 
-    Node node1 = Node(emp1);
-    Node node2 = Node(emp2);
-    Node node3 = Node(emp3);
-    Node node4 = Node(emp4);
-    Node node5 = Node(emp5);
-    Node node6 = Node(emp6);
-    Node node7 = Node(emp7);
-
-    // Test insertion
+    //45, 15, 79, 90, 10, 55, 12, 20
     std::cout << "Inserting employees into the tree...\n";
-    tree.insert(emp1);
-    tree.insert(emp2);
-    tree.insert(emp3);
-    tree.insert(emp4);
-    tree.insert(emp5);
-    tree.insert(emp6);
-    tree.insert(emp7);
+    tree.insert(age1, income1, performance1);
+   /* tree.insert(15, 50000, 90);
+    tree.insert(79, 50000, 90);
+    tree.insert(90, 50000, 90);
+    tree.insert(10, 50000, 90);
+    tree.insert(55, 50000, 90);
+    tree.insert(12, 50000, 90);
+    tree.insert(20, 50000, 90);
+
     // Test traversal (inorder)
     std::cout << "Inorder traversal of the tree:\n";
-    tree.inorder(tree.getRoot());
+    tree.inorder();
+    /*
     // Test search functionality
     std::cout << "\nSearching for Employee with age 25...\n";
     if (tree.search(*emp5)) {
@@ -42,6 +33,7 @@ int main() {
     else {
         std::cout << "Employee with age 25 not found.\n";
     }
+
     // Test removal
     std::cout << "\nRemoving Employee with age 20...\n";
     tree.remove(emp2);
@@ -56,12 +48,8 @@ int main() {
     std::cout << "\nDestroying the tree...\n";
     // Destructor will be called automatically when the program ends
     // Clean up dynamically allocated memory for employees
-    delete emp1;
-    delete emp2;
-    delete emp3;
-    delete emp4;
-    delete emp5;
-    delete emp6;
-    delete emp7;
+
+*/
+
     return 0;
 }
