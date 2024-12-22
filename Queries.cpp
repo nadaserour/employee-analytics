@@ -1,31 +1,35 @@
-#include "Queries.hpp"
-#include "bst.hpp"
-#include "Node.hpp"
+//
+// Created by Nada Serour on 12/21/2024.
+//
+
+#include "Queries.h"
+#include "Node.h"
+#include "BST.h"
 #include <iostream>
 using namespace std;
 
 void Queries:: sumAndCountInc(Node* root, int minAge, int maxAge, double& sum, int& count) {
 	if (root == nullptr) return;
 
-	if (root->getAge() > minAge) sumAndCountInc(root->getLeft(), minAge, maxAge, sum, count);
+	if (root->getEmployee().age > minAge) sumAndCountInc(root->getLeft(), minAge, maxAge, sum, count);
 
-	if (root->getAge() >= minAge && root->getAge() <= maxAge) {
-		sum += root->getIncome();
+	if (root->getEmployee().age >= minAge && root->getEmployee().age <= maxAge) {
+		sum += root->getEmployee().income;
 		count++;
 	}
-	if (root->getAge() < maxAge) sumAndCountInc(root->getRight(), minAge, maxAge, sum, count);
+	if (root->getEmployee().age < maxAge) sumAndCountInc(root->getRight(), minAge, maxAge, sum, count);
 }
 
 void Queries::sumAndCountPerf(Node* root, int minAge, int maxAge, double& sum, int& count) {
 	if (root == nullptr) return;
 
-	if (root->getAge() > minAge) sumAndCountPerf(root->getLeft(), minAge, maxAge, sum, count);
+	if (root->getEmployee().age > minAge) sumAndCountPerf(root->getLeft(), minAge, maxAge, sum, count);
 
-	if (root->getAge() >= minAge && root->getAge() <= maxAge) {
-		sum += root->getPerformance();
+	if (root->getEmployee().age >= minAge && root->getEmployee().age <= maxAge) {
+		sum += root->getEmployee().performance;
 		count++;
 	}
-	if (root->getAge() < maxAge) sumAndCountPerf(root->getRight(), minAge, maxAge, sum, count);
+	if (root->getEmployee().age < maxAge) sumAndCountPerf(root->getRight(), minAge, maxAge, sum, count);
 }
 
 
@@ -52,21 +56,21 @@ double Queries::MaxIncome(int minAge, int maxAge, BST bst) {
 	Node* currentPtr = bst.getRoot();
 
 	while (currentPtr != nullptr) {
-		if (currentPtr->getAge() < minAge)
+		if (currentPtr->getEmployee().age < minAge)
 			currentPtr = currentPtr->getRight();
 
-		else if (currentPtr->getAge() > maxAge)
+		else if (currentPtr->getEmployee().age > maxAge)
 			currentPtr = currentPtr->getLeft();
 		else {
-			maxInc = max(maxInc, currentPtr->getIncome());
+			maxInc = max(maxInc, currentPtr->getEmployee().income);
 			if (currentPtr->getRight() != nullptr) {
 				Node* temp = currentPtr->getRight();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						maxInc = max(maxInc, temp->getIncome());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						maxInc = max(maxInc, temp->getEmployee().income);
 						temp = temp->getLeft();
 					}
-					else if (temp->getAge() < minAge)
+					else if (temp->getEmployee().age < minAge)
 						temp = temp->getRight();
 					else temp = temp->getLeft();
 				}
@@ -75,11 +79,11 @@ double Queries::MaxIncome(int minAge, int maxAge, BST bst) {
 			if (currentPtr->getLeft() != nullptr) {
 				Node* temp = currentPtr->getLeft();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						maxInc = max(maxInc, temp->getIncome());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						maxInc = max(maxInc, temp->getEmployee().income);
 						temp = temp->getRight();
 					}
-					else if (temp->getAge() > maxAge)
+					else if (temp->getEmployee().age > maxAge)
 						temp = temp->getLeft();
 					else temp = temp->getRight();
 				}
@@ -97,21 +101,21 @@ double Queries::MaxPerf(int minAge, int maxAge, BST bst) {
 	Node* currentPtr = bst.getRoot();
 
 	while (currentPtr != nullptr) {
-		if (currentPtr->getAge() < minAge)
+		if (currentPtr->getEmployee().age < minAge)
 			currentPtr = currentPtr->getRight();
 
-		else if (currentPtr->getAge() > maxAge)
+		else if (currentPtr->getEmployee().age > maxAge)
 			currentPtr = currentPtr->getLeft();
 		else {
-			maxPerf = max(maxPerf, currentPtr->getPerformance());
+			maxPerf = max(maxPerf, currentPtr->getEmployee().performance);
 			if (currentPtr->getRight() != nullptr) {
 				Node* temp = currentPtr->getRight();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						maxPerf = max(maxPerf, temp->getPerformance());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						maxPerf = max(maxPerf, temp->getEmployee().performance);
 						temp = temp->getLeft();
 					}
-					else if (temp->getAge() < minAge)
+					else if (temp->getEmployee().age < minAge)
 						temp = temp->getRight();
 					else temp = temp->getLeft();
 				}
@@ -120,11 +124,11 @@ double Queries::MaxPerf(int minAge, int maxAge, BST bst) {
 			if (currentPtr->getLeft() != nullptr) {
 				Node* temp = currentPtr->getLeft();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						maxPerf = max(maxPerf, temp->getPerformance());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						maxPerf = max(maxPerf, temp->getEmployee().performance);
 						temp = temp->getRight();
 					}
-					else if (temp->getAge() > maxAge)
+					else if (temp->getEmployee().age > maxAge)
 						temp = temp->getLeft();
 					else temp = temp->getRight();
 				}
@@ -141,21 +145,21 @@ double Queries::MinIncome(int minAge, int maxAge, BST bst) {
 	Node* currentPtr = bst.getRoot();
 
 	while (currentPtr != nullptr) {
-		if (currentPtr->getAge() < minAge)
+		if (currentPtr->getEmployee().age < minAge)
 			currentPtr = currentPtr->getRight();
 
-		else if (currentPtr->getAge() > maxAge)
+		else if (currentPtr->getEmployee().age > maxAge)
 			currentPtr = currentPtr->getLeft();
 		else {
-			minInc = min(minInc, currentPtr->getIncome());
+			minInc = min(minInc, currentPtr->getEmployee().income);
 			if (currentPtr->getRight() != nullptr) {
 				Node* temp = currentPtr->getRight();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						minInc = min(minInc, temp->getIncome());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						minInc = min(minInc, temp->getEmployee().income);
 						temp = temp->getLeft();
 					}
-					else if (temp->getAge() < minAge)
+					else if (temp->getEmployee().age < minAge)
 						temp = temp->getRight();
 					else temp = temp->getLeft();
 				}
@@ -164,11 +168,11 @@ double Queries::MinIncome(int minAge, int maxAge, BST bst) {
 			if (currentPtr->getLeft() != nullptr) {
 				Node* temp = currentPtr->getLeft();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						minInc = min(minInc, temp->getIncome());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						minInc = min(minInc, temp->getEmployee().income);
 						temp = temp->getRight();
 					}
-					else if (temp->getAge() > maxAge)
+					else if (temp->getEmployee().age > maxAge)
 						temp = temp->getLeft();
 					else temp = temp->getRight();
 				}
@@ -186,21 +190,21 @@ double Queries::MinPerf(int minAge, int maxAge, BST bst) {
 	Node* currentPtr = bst.getRoot();
 
 	while (currentPtr != nullptr) {
-		if (currentPtr->getAge() < minAge)
+		if (currentPtr->getEmployee().age < minAge)
 			currentPtr = currentPtr->getRight();
 
-		else if (currentPtr->getAge() > maxAge)
+		else if (currentPtr->getEmployee().age > maxAge)
 			currentPtr = currentPtr->getLeft();
 		else {
-			minPerf = min(minPerf, currentPtr->getPerformance());
+			minPerf = min(minPerf, currentPtr->getEmployee().performance);
 			if (currentPtr->getRight() != nullptr) {
 				Node* temp = currentPtr->getRight();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						minPerf = min(minPerf, temp->getPerformance());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						minPerf = min(minPerf, temp->getEmployee().performance);
 						temp = temp->getLeft();
 					}
-					else if (temp->getAge() < minAge)
+					else if (temp->getEmployee().age < minAge)
 						temp = temp->getRight();
 					else temp = temp->getLeft();
 				}
@@ -209,11 +213,11 @@ double Queries::MinPerf(int minAge, int maxAge, BST bst) {
 			if (currentPtr->getLeft() != nullptr) {
 				Node* temp = currentPtr->getLeft();
 				while (temp != nullptr) {
-					if (minAge <= temp->getAge() && temp->getAge() <= maxAge) {
-						minPerf = min(minPerf, temp->getPerformance());
+					if (minAge <= temp->getEmployee().age && temp->getEmployee().age <= maxAge) {
+						minPerf = min(minPerf, temp->getEmployee().performance);
 						temp = temp->getRight();
 					}
-					else if (temp->getAge() > maxAge)
+					else if (temp->getEmployee().age > maxAge)
 						temp = temp->getLeft();
 					else temp = temp->getRight();
 				}
@@ -224,4 +228,3 @@ double Queries::MinPerf(int minAge, int maxAge, BST bst) {
 	}
 	return minPerf;
 }
-

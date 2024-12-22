@@ -1,20 +1,48 @@
-#include "Node.hpp"
-#include "Employee.hpp"
-#include <algorithm>  
+//
+// Created by Nada Serour on 12/21/2024.
+//
 
+#include "Node.h"
+#include <iostream>
 using namespace std;
 
-//constructor
-Node::Node(Employee* emp)
-    : employee(emp), left(nullptr), right(nullptr),
-    memoizedCount(1), memoSumIncome(emp->getIncome()), memoSumPerformance(emp->getPerformance()),
-    memoAvgIncome(emp->getIncome()), memoAvgPerformance(emp->getPerformance()),
-    memoMaxIncome(emp->getIncome()), memoMaxPerformance(emp->getPerformance()),
-    memoMinIncome(emp->getIncome()), memoMinPerformance(emp->getPerformance()) {}
+Node::Employee::Employee() : age(0), income(0), performance(0) {}
 
+Node::Employee::Employee(double age, double income, double performance)
+    : age(age), income(income), performance(performance) {}
 
+Node::Node(double age, double income, double performance)
+    : employee(age, income, performance), // Initialize the Employee object directly
+      left(nullptr),
+      right(nullptr),
+      memoizedCount(1),
+      memoSumIncome(income),
+      memoSumPerformance(performance),
+      memoAvgIncome(income),
+      memoAvgPerformance(performance),
+      memoMaxIncome(income),
+      memoMaxPerformance(performance),
+      memoMinIncome(income),
+      memoMinPerformance(performance) {
 
-//setters
+    // Validation for age
+    if (age < 18) {
+        throw std::invalid_argument("Error: Age must be 18 or older.");
+    }
+
+    // Validation for income
+    if (income < 0) {
+        throw std::invalid_argument("Error: Income must be non-negative.");
+    }
+
+    // Validation for performance
+    if (performance < 0) {
+        throw std::invalid_argument("Error: Performance must be non-negative.");
+    }
+
+    // No need to manually create an Employee object because it’s already an object in the Node.
+}
+
 void Node::setLeft(Node* left) {
     this->left = left;
     if (left) {
@@ -30,18 +58,10 @@ void Node::setRight(Node* right) {
     }
     right->updateTreeMemoizedVals(); // Propagate updates upwards
 }
+
 void Node::setParent(Node* parent) {
     this->parent = parent;
 }
-
-
-
-//getters
-int Node::getAge() const { return employee->getAge(); }
-
-double Node::getIncome() const { return employee->getIncome(); }
-
-double Node::getPerformance() const { return employee->getPerformance(); }
 
 Node* Node::getLeft() const { return left; }
 
@@ -49,54 +69,48 @@ Node* Node::getRight() const { return right; }
 
 Node* Node::getParent() const { return parent; }
 
-//setters 
+Node::Employee Node::getEmployee() const { return employee; }
 
-void Node::setAge(int age) { employee->setAge(age); }
+double Node::getMemoSumIncome() const{ return memoSumIncome; }
 
-void Node::setIncome(double income) { employee->setIncome(income); }
+double Node::getMemoSumPerformance() const{ return memoSumPerformance; }
 
-void Node::setPerformance(double performance) { employee->setPerformance(performance); }
+double Node::getMemoMaxIncome() const{ return memoMaxIncome; }
 
-// getters for memoized values
-double Node::getMemoSumIncome() { return memoSumIncome; }
+double Node::getMemoMaxPerformance() const { return memoMaxPerformance; }
 
-double Node::getMemoSumPerformance() { return memoSumPerformance; }
+double Node::getMemoMinIncome() const{ return memoMinIncome; }
 
-double Node::getMemoMaxIncome() { return memoMaxIncome; }
+double Node::getMemoMinPerformance() const{ return memoMinPerformance; }
 
-double Node::getMemoMaxPerformance() { return memoMaxPerformance; }
+double Node::getMemoAvgIncome() const{ return memoAvgIncome; }
 
-double Node::getMemoMinIncome() { return memoMinIncome; }
+double Node::getMemoAvgPerformance() const{ return memoAvgPerformance; }
 
-double Node::getMemoMinPerformance() { return memoMinPerformance; }
-
-double Node::getMemoAvgIncome() { return memoAvgIncome; }
-
-double Node::getMemoAvgPerformance() { return memoAvgPerformance; }
-
-// // memoization update function -- update with every change to the tree (ex: insert)
+// Memoization update function -- update with every change to the tree (ex: insert)
 void Node::updateMemoizedVals() {
-    //initial soln
-// They are re-initialized here because we need to update if we changed 
-//the right or the left of the node
-    memoSumIncome = employee->getIncome();
-    memoSumPerformance = employee->getPerformance();
-    memoMaxIncome = employee->getIncome();
-    memoMaxPerformance = employee->getPerformance();
-    memoMinIncome = employee->getIncome();
-    memoMinPerformance = employee->getPerformance();
+    // They are re-initialized here because we need to update if we changed
+    // the right or the left of the node
+    memoSumIncome = employee.income;
+    memoSumPerformance = employee.performance;
+    memoMaxIncome = employee.income;
+    memoMaxPerformance = employee.performance;
+    memoMinIncome = employee.income;
+    memoMinPerformance = employee.performance;
     memoizedCount = 1;
 
-    // // if the left child exists
+    // If the left child exists
     if (left) {
         memoSumIncome += left->getMemoSumIncome();
-        memoSumPerformance += left->getMemoSumPerformance(); memoMaxIncome = max(memoMaxIncome, left->getMemoMaxIncome());
+        memoSumPerformance += left->getMemoSumPerformance();
+        memoMaxIncome = max(memoMaxIncome, left->getMemoMaxIncome());
         memoMaxPerformance = max(memoMaxPerformance, left->getMemoMaxPerformance());
-        memoMinIncome = min(memoMinIncome, left->getMemoMinIncome()); memoMinPerformance = min(memoMinPerformance, left->getMemoMinPerformance());
+        memoMinIncome = min(memoMinIncome, left->getMemoMinIncome());
+        memoMinPerformance = min(memoMinPerformance, left->getMemoMinPerformance());
         memoizedCount += left->memoizedCount;
     }
 
-    // // if the right child exists
+    // If the right child exists
     if (right) {
         memoSumIncome += right->getMemoSumIncome();
         memoSumPerformance += right->getMemoSumPerformance();
@@ -107,15 +121,12 @@ void Node::updateMemoizedVals() {
         memoizedCount += right->memoizedCount;
     }
 
-    // // use sum and count to calculate the average
+    // Use sum and count to calculate the average
     if (memoizedCount > 0) {
         memoAvgIncome = memoSumIncome / memoizedCount;
         memoAvgPerformance = memoSumPerformance / memoizedCount;
     }
-
 }
-
-
 
 // Tree propagation
 void Node::updateTreeMemoizedVals() {
@@ -126,9 +137,8 @@ void Node::updateTreeMemoizedVals() {
     }
 }
 
-//destructor
+// Destructor
 Node::~Node() {
-    delete employee;
     delete left;
     delete right;
 }
