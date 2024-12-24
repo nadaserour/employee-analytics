@@ -228,3 +228,48 @@ double Queries::MinPerf(int minAge, int maxAge, BST bst) {
 	}
 	return minPerf;
 }
+
+void Queries:: collectTopKNodes(Node* root, int minAge, int maxAge, int K, bool isIncomeQuery, PriorityQueue& pq)
+{
+	if (root == nullptr) return;
+
+        double age = root->getEmployee().age;
+        if (age >= minAge && age <= maxAge) {
+            if (pq.isEmpty() || pq.size() < K) {
+                if (isIncomeQuery) {
+                    pq.push(root->getEmployee().income);
+                } else {
+                    pq.push(root->getEmployee().performance);
+                }
+            } else {
+                int currentValue = (isIncomeQuery) ? root->getEmployee().income : root->getEmployee().performance;
+                int topValue = pq.top();
+
+                if (currentValue > topValue) {
+                    pq.pop();
+                    pq.push(currentValue);
+                }
+            }
+        }
+
+        collectTopKNodes(root->getLeft(), minAge, maxAge, K, isIncomeQuery, pq);
+        collectTopKNodes(root->getRight(), minAge, maxAge, K, isIncomeQuery, pq);
+}
+
+void Queries::TopKNodes(int minAge, int maxAge, int K, bool isIncomeQuery, BST bst) {
+        PriorityQueue pq(K);
+
+        collectTopKNodes(bst.getRoot(), minAge, maxAge, K, isIncomeQuery, pq);
+
+        cout << "Top " << K << " Nodes:" << endl;
+        while (!pq.isEmpty()) {
+            int topValue = pq.top();
+            pq.pop();
+
+            if (isIncomeQuery) {
+                cout << "Income: " << topValue << endl;
+            } else {
+                cout << "Performance: " << topValue << endl;
+            }
+        }
+    }

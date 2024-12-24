@@ -1,23 +1,24 @@
-#include <iostream>
-#include <queue>
-#include "bst.hpp"
+//
+// Created by Nada Serour on 12/21/2024.
+//
 
+#include <iostream>
+#include "bst.h"
 
 BST::BST() {}
 
-void BST::inorder(NodePtr root)const {  //LNR
+void BST::inorder() const {
+    inorderPrivate(root);
+}
 
-    if (!root) {
+void BST::inorderPrivate(NodePtr ptr) const {  // LNR
+    if (empty()) {
         return;
-    }//check if the tree itself is empty or we've reached a leaf node
+    } // Check if the tree itself is empty or we've reached a leaf node
 
-    inorder(root->getLeft());//traverse through the ledt subtree
-
-    cout << root->getAge();//print the age of the node we're at after getting back to it
-
-    inorder(root->getRight());//traverse through the right subtree after traversing through left and printing the root
-
-
+    inorderPrivate(ptr->getLeft()); // Traverse through the left subtree
+    cout << ptr->getEmployee().age << " "; // Print the age of the node we're at after getting back to it
+    inorderPrivate(ptr->getRight()); // Traverse through the right subtree after traversing through left and printing the root
 }
 
 Node* BST::getRoot() {
@@ -28,183 +29,129 @@ void BST::setRoot(Node* root) {
     this->root = root;
 }
 
-/*
+// void BST::BFS() const {
+//     BFSPrivate(root);
+// }
 
-void BST::postOrder(NodePtr root)const{ //LRN
-
-    if(!root)return;
-    postOrder(root->getLeft());
-    postOrder(root->getRight());
-    cout<<root->getAge();
-
-}
-
-void BST::preOrder(NodePtr root)const{ //NLR
-
-    if(!root)return;
-    cout<<root->getAge();
-    preOrder(root->getLeft());
-    preOrder(root->getRight());
-
-}
-*/
-
-void BST::BFS()const
-{
-    BFSPrivate(root);
-}
-
-void BST::BFSPrivate(NodePtr root)const {
-    if (!root)return;
-
-    queue<Node*>q;
-    q.push(root);
-    while (!q.empty()) {
-        Node* current = q.front();
-        q.pop();
-        cout << current->getAge() << " ";
-        if (current->getLeft()) {
-            q.push(current->getLeft());
-        }
-        if (current->getRight()) {
-            q.push(current->getRight());
-        }
-
-
-    }
-
-}
+// void BST::BFSPrivate(NodePtr root) const {
+//     if (!root) return;
+//
+//     queue<Node*> q;
+//     q.push(root);
+//     while (!q.empty()) {
+//         Node* current = q.front();
+//         q.pop();
+//         cout << current->getAge() << " ";
+//         if (current->getLeft()) {
+//             q.push(current->getLeft());
+//         }
+//         if (current->getRight()) {
+//             q.push(current->getRight());
+//         }
+//     }
+// }
 
 bool BST::empty() const {
     return root == nullptr;
 }
 
-
-//search
-template <typename ElementType>
-bool BST::search(const ElementType& item) const
-{
-    searchPrivate(item, false, root, nullptr);
+// Search
+bool BST::search(double age) const {
+    return searchPrivate(age, root); // Pass root directly
 }
 
-
-//check for implementation
-template <typename ElementType>
-bool BST::searchPrivate(const ElementType& item, bool& found, Node*& locptr, Node*& parent) const {
-    while (!found && locptr != nullptr) {
-        if (item < locptr->getAge()) {
-            parent = locptr;
-            locptr = locptr->getLeft();
+bool BST::searchPrivate(double age, NodePtr locptr) const {
+    while (locptr != nullptr) {
+        if (age < locptr->getEmployee().age) {
+            locptr = locptr->getLeft(); // Traverse left subtree
+        } else if (locptr->getEmployee().age < age) {
+            locptr = locptr->getRight(); // Traverse right subtree
+        } else {
+            return true; // Found the item
         }
-        else if (locptr->getAge() < item) {
-            parent = locptr;
-            locptr = locptr->getLeft();
-        }
-        else found = true;
     }
+    return false; // Item not found
 }
 
-//Node* BST::nodeLoc( int age) {
-//    Node* myPtr = root;
-//    Node* parent = nullptr;
-//    while (myPtr != nullptr) {
-//        if (myPtr->getAge() < age) {
-//            parent = myPtr;
-//            myPtr = myPtr->getRight();
-//        }
-//        if (myPtr->getAge() > age) {
-//            parent = myPtr;
-//            myPtr = myPtr->getLeft();
-//        }
-//        if (myPtr->getAge() == age)
-//            return myPtr;
-//       
-//
-//    }
-//
-//    return nullptr;
-//}
-
-
-//insert
-
-BST::NodePtr BST::createLeaf(Employee* item) {
-    NodePtr leaf = new Node(item);
+// Insert
+BST::NodePtr BST::createLeaf(double age, double income, double performance) {
+    NodePtr leaf = new Node (age, income, performance);
     return leaf;
 }
 
-void BST::insert(Employee* item) {
-    root = insertPrivate(item, root); // Start insertion from the root
+void BST::insert(double age, double income, double performance) {
+    root = insertPrivate(age, income, performance, root); // Start insertion from the root
 }
 
-
-BST::NodePtr BST::insertPrivate(Employee* item, NodePtr ptr) {
+BST::NodePtr BST::insertPrivate(double age, double income, double performance, NodePtr ptr) {
     if (ptr == nullptr) {
         // Create a new leaf node if the current position is empty
-        return createLeaf(item);
+        return createLeaf(age, income, performance);  // Directly create a Node with age, income, and performance
     }
+
     // Insert into the left subtree if the item's age is less than the current node's age
-    if (item->getAge() < ptr->getAge()) {
-        ptr->setLeft(insertPrivate(item, ptr->getLeft()));
+    if (age < ptr->getEmployee().age) {
+        ptr->setLeft(insertPrivate(age, income, performance, ptr->getLeft()));
     }
     // Insert into the right subtree if the item's age is greater than the current node's age
-    else if (item->getAge() > ptr->getAge()) {
-        ptr->setRight(insertPrivate(item, ptr->getLeft()));
+    else if (age > ptr->getEmployee().age) {
+        ptr->setRight(insertPrivate(age, income, performance, ptr->getRight()));
     }
     // Handle duplicate data
     else {
         std::cout << "This item already exists\n";
         return ptr;
     }
+
     // Update memoized values of the current node after insertion
     ptr->updateTreeMemoizedVals();
     return ptr;
-
 }
 
-
-//remove
-//Remove Node
- // Remove Node
-void BST::remove(const Employee* item) {
-    removePrivate(item, root);
+// Remove
+/*void BST::remove(double age) {
+    removePrivate(age, root);
 }
-void BST::removePrivate(const Employee* item, NodePtr parent) {
-    int key = item->getAge();
-    // Check for several cases (empty, root, no children, one child, two children)
+/*
+void BST::removePrivate(double age, NodePtr parent) {
+    // Check for the base case where the tree is empty
     if (!empty()) {
-        if (root->getAge() == key) {
-            removeRootMatch(); // Helper function
-        }
-        else {
+        if (root->getEmployee().age == age) {
+            removeRootMatch(); // Helper function for removing the root match
+        } else {
             // In left subtree
-            if (key < parent->getAge() && parent->getLeft() != nullptr) {
-                parent->getLeft()->getAge() == key
-                    ? removeMatch(parent, parent->getLeft(), true) // Another helper function
-                    : removePrivate(item, parent->getLeft()); // Recursive call
+            if (age < parent->getEmployee().age) {
+                if (parent->getLeft() != nullptr && parent->getLeft()->getEmployee().age == age) {
+                    removeMatch(parent, parent->getLeft(), true);
+                } else {
+                    removePrivate(age, parent->getLeft());
+                }
             }
             // In right subtree
-            else if (key > parent->getAge() && parent->getRight() != nullptr) {
-                parent->getRight()->getAge() == key
-                    ? removeMatch(parent, parent->getRight(), false) // Another helper function
-                    : removePrivate(item, parent->getRight()); // Recursive call
-            }
-            // Not in tree
-            else {
+            else if (age > parent->getEmployee().age) {
+                if (parent->getRight() != nullptr && parent->getRight()->getEmployee().age == age) {
+                    removeMatch(parent, parent->getRight(), false);
+                } else {
+                    removePrivate(age, parent->getRight());
+                }
+            } else {
                 std::cout << "The node is not found\n";
             }
         }
-    }
-    else {
+    } else {
         std::cout << "The tree is empty\n";
     }
 }
+/*
 // Helper functions for removeNode function
 void BST::removeRootMatch() {
     if (root != nullptr) {
         NodePtr delPtr = root;
-        int rootData = root->getAge();
+        double rootAge = root->getEmployee().age;
+        double rootIncome = root->getEmployee().income;
+        double rootPerformance = root->getEmployee().performance;
         int minInRightSubTree;
+
         // Case 0 - 0 Children
         if (root->getLeft() == nullptr && root->getRight() == nullptr) {
             root = nullptr;
@@ -215,8 +162,7 @@ void BST::removeRootMatch() {
             root = root->getRight();
             delPtr->setRight(nullptr);
             delete delPtr;
-        }
-        else if (root->getLeft() != nullptr && root->getRight() == nullptr) {
+        } else if (root->getLeft() != nullptr && root->getRight() == nullptr) {
             root = root->getLeft();
             delPtr->setLeft(nullptr);
             delete delPtr;
@@ -226,19 +172,22 @@ void BST::removeRootMatch() {
             // Replace the root with the smallest value in the right subtree
             minInRightSubTree = findMinVal(root->getRight());
             Employee temp(minInRightSubTree, 0, 0); // Create a temporary Employee object
-            removePrivate(&temp, root);
+            removePrivate(temp.getAge(), root);
             root->setAge(minInRightSubTree);
         }
-    }
-    else {
+    } else {
         std::cout << "The tree is empty\n";
     }
 }
+
 void BST::removeMatch(NodePtr parent, NodePtr match, bool left) {
     if (!empty()) {
         NodePtr delPtr;
-        int matchKey = match->getAge();
+        int matchAge = match->getEmployee().age;
+        double matchIncome = match->getEmployee().income;
+        double matchPerformance = match->getEmployee().performance;
         int minInRightSubTree;
+
         // Case 0 - 0 Children
         if (match->getLeft() == nullptr && match->getRight() == nullptr) {
             delPtr = match;
@@ -261,23 +210,22 @@ void BST::removeMatch(NodePtr parent, NodePtr match, bool left) {
         else if (match->getLeft() != nullptr && match->getRight() != nullptr) {
             minInRightSubTree = findMinVal(match->getRight());
             Employee temp(minInRightSubTree, 0, 0); // Create a temporary Employee object
-            removePrivate(&temp, match);
+            removePrivate(temp.getAge(), match);
             match->setAge(minInRightSubTree);
         }
-    }
-    else {
+    } else {
         std::cout << "The tree is empty\n";
     }
 }
+*/
 // Find minimum value
 int BST::findMinVal(NodePtr ptr) {
     if (ptr != nullptr) {
         if (ptr->getLeft() == nullptr) // If you want to findMax, replace left with right
-            return ptr->getAge();
+            return ptr->getEmployee().age;
         else
             return findMinVal(ptr->getLeft());
-    }
-    else {
+    } else {
         std::cout << "The tree is empty\n";
         return -1000; // In case of int
     }
@@ -285,12 +233,11 @@ int BST::findMinVal(NodePtr ptr) {
 
 int BST::findMaxVal(NodePtr ptr) {
     if (ptr != nullptr) {
-        if (ptr->getRight() == nullptr) 
-            return ptr->getAge();
+        if (ptr->getRight() == nullptr)
+            return ptr->getEmployee().age;
         else
             return findMinVal(ptr->getRight());
-    }
-    else {
+    } else {
         std::cout << "The tree is empty\n";
         return -1000; // In case of int
     }
@@ -300,6 +247,7 @@ int BST::findMaxVal(NodePtr ptr) {
 BST::~BST() {
     removeSubTree(root);
 }
+
 void BST::removeSubTree(NodePtr ptr) {
     // Post-order traversal
     if (ptr != nullptr) {
