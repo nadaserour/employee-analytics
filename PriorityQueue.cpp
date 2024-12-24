@@ -90,3 +90,7 @@ void PriorityQueue::pop() {
 bool PriorityQueue::isEmpty() {
     return size == 0;
 }
+
+int PriorityQueue::getsize() {
+    return size;
+}

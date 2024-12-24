@@ -5,6 +5,7 @@
 #include "Queries.h"
 #include "Node.h"
 #include "BST.h"
+#include "PriorityQueue.hpp"
 #include <iostream>
 using namespace std;
 
@@ -235,7 +236,7 @@ void Queries:: collectTopKNodes(Node* root, int minAge, int maxAge, int K, bool 
 
         double age = root->getEmployee().age;
         if (age >= minAge && age <= maxAge) {
-            if (pq.isEmpty() || pq.size() < K) {
+            if (pq.isEmpty() || pq.getsize() < K) {
                 if (isIncomeQuery) {
                     pq.push(root->getEmployee().income);
                 } else {

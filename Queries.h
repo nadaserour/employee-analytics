@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Node.h"
 #include "BST.h"
+#include "PriorityQueue.hpp"
 using namespace std;
 
 

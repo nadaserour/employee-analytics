@@ -2,6 +2,7 @@
 #define QUERIES
 #include <iostream>
 #include "bst.hpp"
+#include "PriorityQueue.hpp"
 using namespace std;
 
 

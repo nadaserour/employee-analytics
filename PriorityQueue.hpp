@@ -23,6 +23,7 @@ public:
     int top();
     void pop();
     bool isEmpty();
+    int getsize();
 };
 
 #endif
